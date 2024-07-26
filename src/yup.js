@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import * as yup from './yup';
 
 const schema = yup.object().shape({
     url: yup.string()

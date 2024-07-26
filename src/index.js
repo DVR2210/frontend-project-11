@@ -1,2 +1,2 @@
-import schema from './yup';
-import './src/styles.scss'
+import * as yup from 'yup';
+import './styles.scss';
