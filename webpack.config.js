@@ -1,3 +1,4 @@
+import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
@@ -11,16 +12,12 @@ export default {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/i,
-        loader: 'babel-loader',
-      },
-      {
         test: /\.css$/,
         use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader', 'postcss-loader'],
+        use: ['style-loader', 'css-loader', 'sass-loader', 'postcss-loader'],
       },
       {
         test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -34,8 +31,7 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: './src/index.html',
     }),
-    new MiniCssExtractPlugin(),
   ],
 };
