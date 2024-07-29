@@ -14,6 +14,7 @@ const schema = yup.object().shape({
  
   const form = document.getElementById('rss-form');
   const input = document.getElementById('url-input');
+  const button = document.getElementById('add-button');
 
   form.addEventListener('submit', (event) => {
     event.preventDefault(); // 
@@ -24,10 +25,17 @@ const schema = yup.object().shape({
     schema.validate(formData, { context: { existingUrls: ['http://existingurl.com'] } })
     .then(() => {
       input.classList.remove('is-invalid');
+      alert("remove");
     })
     .catch((err) => {
       input.classList.add('is-invalid');
+      alert("add");
     });
 });
 
- 
+
+  
+  button.addEventListener('click', (event) => {
+    event.preventDefault();  
+    alert("Работает!");
+  });
