@@ -38,21 +38,28 @@ export default () => {
         elements.feedback.innerText = message; 
       };
 
+      const showDubleRssMessage = () => { // 'RSS уже существует'
+        const message = i18nInstance.t('errors.doubleRss');
+        elements.feedback.innerText = message; 
+      }; 
+
+      const showEmptyFieldMessage = () => { // Поле не должно быть пустым'
+        const message = i18nInstance.t('errors.emptyField');
+        elements.feedback.innerText = message;
+      };
+
 
       const schema = yup.object().shape({
         url: yup.string()
-          .url('Введите корректный URL') // Проверяет, что строка является корректным URL
-          .required('URL обязателен') // Проверяет, что поле не пустое
-          .test('unique', 'URL уже добавлен', function(value) {
+          .url('Ссылка должна быть валидным URL') // Проверяет, что строка является корректным URL
+          .required('Поле не должно быть пустым') // Проверяет, что поле не пустое
+          .test('unique', 'RSS уже существует', function(value) {
               const { existingUrls } = this.options.context;
               console.log('Проверяемый URL:', value);
               console.log('Существующие URL:', existingUrls);
               return existingUrls ? !existingUrls.includes(value) : true;
           })
-          .test('hasDomain', 'URL должен содержать доменное имя', function(value) {
-            const domainPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/|$)/;
-            return domainPattern.test(value);
-          })
+          
       });
 
       elements.form.addEventListener('submit', (event) => {
@@ -70,13 +77,49 @@ export default () => {
               
         })
         .catch((err) => {
-          console.log("имя ошибки", err.name.massage)
-          elements.input.classList.add('is-invalid');
-          showInvalidUrlMessage();
-        });
-      });
+          
+          if (err.inner.length === 0) {
+            err.inner = [err];
+          }
+      
+          err.inner.forEach((error) => {
+            switch (error.message) {
 
-     
+              case 'Ссылка должна быть валидным URL':
+                elements.input.classList.add('is-invalid');
+                elements.feedback.classList.remove('text-success');
+                elements.feedback.classList.add('text-danger');
+                showInvalidUrlMessage();
+                console.log('Ошибка валидации: Некорректный URL');
+                break;
+
+              case 'Поле не должно быть пустым':
+                elements.input.classList.add('is-invalid');
+                elements.feedback.classList.remove('text-success');
+                elements.feedback.classList.add('text-danger');
+                showEmptyFieldMessage();
+                console.log('Ошибка валидации: URL обязателен');
+                break;
+
+
+              case 'RSS уже существует':
+                elements.input.classList.add('is-invalid');
+                elements.feedback.classList.remove('text-success');
+                elements.feedback.classList.add('text-danger');
+                showDubleRssMessage();
+                console.log('Ошибка валидации: RSS уже существует');
+                break;
+
+
+              default:
+                console.log('Неизвестная ошибка валидации');
+            }
+          });
+
+        });
+      });    
     });
   };
+
+
   
