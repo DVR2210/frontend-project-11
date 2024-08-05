@@ -27,7 +27,18 @@ export default () => {
           button: document.querySelector('.full-article'),
         },
       };
-      
+
+      const showSucсessMessage = () => { // RSS успешно загружен
+        const message = i18nInstance.t('sucсess'); 
+        elements.feedback.innerText = message;
+      };
+
+      const showInvalidUrlMessage = () => { // Ссылка должна быть валидным URL     
+        const message = i18nInstance.t('errors.invalidUrl'); 
+        elements.feedback.innerText = message; 
+      };
+
+
       const schema = yup.object().shape({
         url: yup.string()
           .url('Введите корректный URL') // Проверяет, что строка является корректным URL
@@ -38,6 +49,10 @@ export default () => {
               console.log('Существующие URL:', existingUrls);
               return existingUrls ? !existingUrls.includes(value) : true;
           })
+          .test('hasDomain', 'URL должен содержать доменное имя', function(value) {
+            const domainPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/|$)/;
+            return domainPattern.test(value);
+          })
       });
 
       elements.form.addEventListener('submit', (event) => {
@@ -45,22 +60,21 @@ export default () => {
         
         const url = elements.input.value.trim();
         const formData = { url };
-        
-        console.log('Отправленные данные формы:', formData);
-      
+           
         schema.validate(formData, { context: { existingUrls: ['http://existingurl.com'] } })
         .then(() => {
          elements.input.classList.remove('is-invalid');
-         console.error('Успех:', err.errors);
-          
+         elements.feedback.classList.remove('text-danger');
+         elements.feedback.classList.add('text-success');
+         showSucсessMessage()
+              
         })
         .catch((err) => {
+          console.log("имя ошибки", err.name.massage)
           elements.input.classList.add('is-invalid');
-          console.error('Ошибка валидации:', err.errors);
-          alert(`"Не удача" ${JSON.stringify(formData)}`);
+          showInvalidUrlMessage();
         });
       });
-
 
      
     });
