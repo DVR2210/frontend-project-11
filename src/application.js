@@ -89,11 +89,11 @@ export default () => {
           const parsedData = parser(url);
           console.log(parsedData);
 
-          return getAxiosResponse(url); // новое изменение - поулчение данных 
+          return getAxiosResponse(url); // новое изменение - поулчение данных <------- вот эти коменты 
               
         })
 
-        .then((response) => { // Парсим данные с помощью функции parser
+        .then((response) => { // Парсим данные с помощью функции parser <------- вот эти коменты 
           const parsedData = parser(response.data.contents);
           console.log('Результат парсинга:', parsedData);
         })
