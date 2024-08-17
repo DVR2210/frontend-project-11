@@ -3,6 +3,15 @@ import './styles.scss';
 import resources from './locales/index.js';
 import onChange from 'on-change';
 import i18next from 'i18next';
+import parser from './parser.js';
+
+const getAxiosResponse = (url) => {
+  const allOrigins = 'https://allorigins.hexlet.app/get';
+  const newUrl = new URL(allOrigins);
+  newUrl.searchParams.set('url', url);
+  newUrl.searchParams.set('disableCache', 'true');
+  return axios.get(newUrl);
+};
 
 const defaultLanguage = 'ru';
 
@@ -65,17 +74,30 @@ export default () => {
       elements.form.addEventListener('submit', (event) => {
         event.preventDefault(); 
         
+        
+
         const url = elements.input.value.trim();
         const formData = { url };
+
            
         schema.validate(formData, { context: { existingUrls: ['http://existingurl.com'] } })
         .then(() => {
-         elements.input.classList.remove('is-invalid');
-         elements.feedback.classList.remove('text-danger');
-         elements.feedback.classList.add('text-success');
-         showSucсessMessage()
+          elements.input.classList.remove('is-invalid');
+          elements.feedback.classList.remove('text-danger');
+          elements.feedback.classList.add('text-success');
+          showSucсessMessage()
+          const parsedData = parser(url);
+          console.log(parsedData);
+
+          return getAxiosResponse(url); // новое изменение - поулчение данных 
               
         })
+
+        .then((response) => { // Парсим данные с помощью функции parser
+          const parsedData = parser(response.data.contents);
+          console.log('Результат парсинга:', parsedData);
+        })
+
         .catch((err) => {
           
           if (err.inner.length === 0) {
