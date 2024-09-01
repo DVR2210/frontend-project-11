@@ -4,6 +4,9 @@ import resources from './locales/index.js';
 import onChange from 'on-change';
 import i18next from 'i18next';
 import parser from './parser.js';
+import axios from 'axios';
+import view from './view.js';
+
 
 const getAxiosResponse = (url) => {
   const allOrigins = 'https://allorigins.hexlet.app/get';
@@ -12,6 +15,18 @@ const getAxiosResponse = (url) => {
   newUrl.searchParams.set('disableCache', 'true');
   return axios.get(newUrl);
 };
+
+
+getAxiosResponse('https://lorem-rss.hexlet.app/feed')
+  .then(response => {
+    console.log('Full response:', response);
+    
+    console.log('Contents:', response.data.contents);
+    console.log("функция парсер", parser(response.data.contents));
+  })
+  .catch(error => console.error('Error:', error));
+
+
 
 const defaultLanguage = 'ru';
 
@@ -74,8 +89,6 @@ export default () => {
       elements.form.addEventListener('submit', (event) => {
         event.preventDefault(); 
         
-        
-
         const url = elements.input.value.trim();
         const formData = { url };
 
@@ -97,6 +110,8 @@ export default () => {
           const parsedData = parser(response.data.contents);
           console.log('Результат парсинга:', parsedData);
         })
+
+    
 
         .catch((err) => {
           
@@ -139,9 +154,19 @@ export default () => {
           });
 
         });
-      });    
+
+      }); 
+
+    document.getElementById('btn-lg').addEventListener('click', function(event) {
+      event.preventDefault(); // Предотвращаем отправку формы
+      view.addPostBlock(); // Вызываем функцию добавления блока "Посты"
+      view.addFidsBlock(); // Вызываем функцию добавления блока "Посты"
+      view.createListItem('http', 'мой тестовый текст', '234');  
     });
-  };
+
+
+  });
+};
 
 
   

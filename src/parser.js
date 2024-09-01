@@ -11,6 +11,7 @@ export default (data) => {
   const feedTitle = channel.querySelector('title').textContent;
   const feedDescription = channel.querySelector('description').textContent;
   const feedLink = channel.querySelector('link').textContent;
+
   const feed = { title: feedTitle, description: feedDescription, link: feedLink };
 
   const items = Array.from(parsedData.querySelectorAll('item'));
