@@ -5,7 +5,10 @@ import onChange from 'on-change';
 import i18next from 'i18next';
 import parser from './parser.js';
 import axios from 'axios';
-import view from './view.js';
+import view, { addPostBlock, addFidsBlock, createListItem } from './view.js';
+
+const defaultLanguage = 'ru';
+const timeout = 5000; 
 
 const getAxiosResponse = (url) => {
   const allOrigins = 'https://allorigins.hexlet.app/get';
@@ -46,12 +49,16 @@ export default () => {
       emptyField: i18nInstance.t('errors.emptyField'),
     };
 
+    //let parsedData = null;
+
     const showMessage = (message, isError = true) => {
       elements.feedback.innerText = message;
       elements.feedback.classList.toggle('text-danger', isError);
       elements.feedback.classList.toggle('text-success', !isError);
       elements.input.classList.toggle('is-invalid', isError);
     };
+
+
 
     const schema = yup.object().shape({
       url: yup.string()
@@ -123,12 +130,19 @@ export default () => {
         const parsedData = parser(response.data.contents);
         console.log('Результат парсинга:', parsedData);
         showMessage(messages.success, false);
+        //renderPosts(parsedData);
       } catch (error) {
         showMessage('Ошибка при загрузке RSS');
         console.error('Ошибка при загрузке RSS:', error);
       }
     });
   });
+
+  const { addPostBlock, addFidsBlock, createListItem } = view;
+  
+  addPostBlock();
+  addFidsBlock();
+
 };
 
   

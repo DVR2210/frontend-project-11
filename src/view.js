@@ -86,8 +86,10 @@ function createListItem(href, textContent, dataId) { // Создаем элем�
     liElement.appendChild(aElement); // Вкладываем элементы a и кнопку в li
     liElement.appendChild(buttonElement); 
 
-    const cardTitleDiv = document.querySelector('.card-title');
-    cardTitleDiv.appendChild(ulElement);
+    //const cardTitleDiv = document.querySelector('.card-title');
+    //cardTitleDiv.appendChild(ulElement);
+
+    container.appendChild(ulElement);
     
 };
 
