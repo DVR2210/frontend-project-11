@@ -6,7 +6,8 @@ const __dirname = path.dirname(__filename);
 
 export default {
 
-  entry: './src/index.js',
+  //entry: './src/index.js',
+  entry: './indextest.js',
 
   output: { 
     path: path.join(__dirname, "dist"), 
