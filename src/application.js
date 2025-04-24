@@ -1,17 +1,17 @@
 import onChange from 'on-change';
 import axios from 'axios';
-import { string, setLocale } from 'yup'; //import * as yup from 'yup';
+import { string, setLocale } from 'yup';
 
-import uniqueId from 'lodash/uniqueId.js'; //
+import uniqueId from 'lodash/uniqueId.js';
 import i18next from 'i18next';
 import resources from './locales/index.js';
+import render from './view.js';
 import parser from './parser.js';
-import render from './view.js'; //
 
 const defaultLanguage = 'ru';
-const timeout = 5000; 
+const timeout = 5000;
 
-const validate = (url, urlList) => { //
+const validate = (url, urlList) => {
   const schema = string().trim().required().url()
     .notOneOf(urlList);
   return schema.validate(url);
@@ -25,7 +25,7 @@ const getAxiosResponse = (url) => {
   return axios.get(newUrl);
 };
 
-const createPosts = (state, newPosts, feedId) => { ///
+const createPosts = (state, newPosts, feedId) => {
   const preparedPosts = newPosts.map((post) => ({ ...post, feedId, id: uniqueId() }));
   state.content.posts = [...state.content.posts, ...preparedPosts];
 };
@@ -146,4 +146,7 @@ export default () => {
       }
     });
   });
+
+alert("APLIRKATION")
+
 };
