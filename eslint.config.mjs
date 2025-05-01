@@ -3,7 +3,6 @@
 // import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
 // import { fixupConfigRules } from "@eslint/compat";
 
-
 // export default [
 //   {files: ["**/*.{js,mjs,cjs,jsx}"]},
 //   { languageOptions: { parserOptions: { ecmaFeatures: { jsx: true } } } },
@@ -12,9 +11,9 @@
 //   ...fixupConfigRules(pluginReactConfig),
 // ];
 
-import globals from 'globals'
-import pluginJs from '@eslint/js'
-import stylisticJs from '@stylistic/eslint-plugin-js'
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import stylisticJs from '@stylistic/eslint-plugin-js';
 
 export default [
   { files: ['**/*.{js,mjs,cjs}'] }, // Убрали .jsx, так как React не используется
@@ -41,4 +40,4 @@ export default [
       '@stylistic/arrow-parens': ['error', 'as-needed'], // Скобки в стрелочных функциях только при необходимости
     },
   },
-]
+];
