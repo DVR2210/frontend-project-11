@@ -11,33 +11,15 @@ import parser from './parser.js';
 const defaultLanguage = 'ru';
 const timeout = 5000;
 
-// const validate = (url, urlList) => {
-//   const schema = string().trim().required().url().notOneOf(urlList);
-//   return schema.validate(url, { abortEarly: false }).catch((error) => {
-//     console.error('Ошибка валидации Yup:', error.message, error.errors);
-//     throw error;
-//   });
-// };
-
-// const validate = (url, urlList) => {
-//   const schema = string().trim().required().url().notOneOf(urlList);
-//   console.log('Валидация URL:', url, 'Список существующих URL:', urlList); // Лог для отладки
-//   return schema.validate(url, { abortEarly: false }).catch((error) => {
-//     console.error('Ошибка валидации Yup:', error.message, error.errors); // Лог ошибки
-//     throw error;
-//   });
-// };
-
 const validate = (url, urlList) => {
   const schema = string().trim().required().url().notOneOf(urlList);
   console.log('Валидация URL:', url, 'Список существующих URL:', urlList);
   return schema.validate(url, { abortEarly: false })
     .then((result) => {
-      console.log('Валидация успешна:', result); // Лог успеха
-      return result;
+      console.log('Валидация успешна:', result);
     })
     .catch((error) => {
-      console.error('Ошибка валидации Yup:', error.message, error.errors); // Лог ошибки
+      console.error('Ошибка валидации Yup:', error.message, error.errors);
       throw error;
     });
 };
@@ -85,7 +67,7 @@ export default () => {
     debug: true,
     resources,
   }).then(() => {
-    console.log('i18next инициализирован:', i18nInstance.t('success')); // Лог для проверки
+    console.log('i18next инициализирован:', i18nInstance.t('success'));
     const elements = {
       form: document.querySelector('.rss-form'),
       input: document.querySelector('input[id="url-input"]'),
@@ -141,7 +123,7 @@ export default () => {
     elements.form.addEventListener('submit', (e) => {
       e.preventDefault();
       const urlList = watchedState.content.feeds.map(({ link }) => link);
-      console.log('Перед валидацией: inputValue=', watchedState.inputValue, 'urlList=', urlList); // Лог для отладки
+      console.log('Перед валидацией: inputValue=', watchedState.inputValue, 'urlList=', urlList);
 
       validate(watchedState.inputValue, urlList)
         .then(() => {
@@ -150,6 +132,7 @@ export default () => {
           return getAxiosResponse(watchedState.inputValue);
         })
         .then((response) => {
+          console.log('Ответ от allorigins:', response.data);
           const data = response.data.contents;
           const { feed, posts } = parser(data, i18nInstance, elements);
           const feedId = uniqueId();
@@ -160,7 +143,7 @@ export default () => {
           watchedState.process.processState = 'finished';
         })
         .catch((error) => {
-          console.error('Ошибка в обработчике submit:', error.message, error); // Лог ошибки
+          console.error('Ошибка в обработчике submit:', error.message, error);
           watchedState.valid = false;
           watchedState.process.error = error.message ?? 'defaultError';
           watchedState.process.processState = 'error';
@@ -174,18 +157,11 @@ export default () => {
     });
 
     elements.posts.addEventListener('click', (e) => {
-      console.log("кнопки отработал") // временно 
-      console.log(posts) // временно 
       const currentPostId = e.target.dataset.id;
       if (currentPostId) {
         watchedState.uiState.visitedLinksIds.add(currentPostId);
         console.log(`Добавлен ID: ${currentPostId}`);
       }
-      alert("Кнопка клик РАБОТАЕ!") // временно 
     });
-
   });
-
-alert("APLIRKATION.JS отработал")
-
 };

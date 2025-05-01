@@ -129,8 +129,8 @@ const renderPosts = (state, div, i18nInstance) => {
         handlerFinishWithError(elements, state.process.error, i18nInstance);
         break;
       case 'sending':
-        elements.button.setAttribute('disabled');
-        elements.input.setAttribute('readonly');
+        elements.button.setAttribute('disabled', 'disabled');
+        elements.input.setAttribute('readonly', 'readonly');
         break;
       default:
         throw new Error(`Unknown process state: ${value}`);

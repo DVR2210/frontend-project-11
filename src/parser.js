@@ -1,11 +1,11 @@
 export default (data) => {
-  console.log('Входные XML-данные:', data); // парсинг данных 
+  console.log('Входные XML-данные:', data);
   const parser = new DOMParser();
   const parsedData = parser.parseFromString(data, 'application/xml');
 
   const error = parsedData.querySelector('parsererror');
   if (error) {
-    console.error('Ошибка парсинга:', error); // Логируем ошибку парсинга
+    console.error('Ошибка парсинга:', error);
     throw new Error('parseError');
   }
 
@@ -28,16 +28,3 @@ export default (data) => {
    
   return { feed, posts };
 };
-
-// {
-//   feed: {
-//     title: "Мой RSS-канал",
-//     description: "Описание канала",
-//     link: "https://example.com/feed"
-//   },
-//   posts: [
-//     { title: "Пост 1", description: "Описание поста 1", link: "https://example.com/post1" },
-//     { title: "Пост 2", description: "Описание поста 2", link: "https://example.com/post2" },
-//     // ...
-//   ]
-// }
