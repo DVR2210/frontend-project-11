@@ -1,4 +1,4 @@
-import onChange from 'on-change';
+import onChange from 'on-change'
 import axios from 'axios';
 import { string, setLocale } from 'yup';
 import uniqueId from 'lodash/uniqueId.js';
