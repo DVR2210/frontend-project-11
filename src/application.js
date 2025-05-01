@@ -160,7 +160,6 @@ export default () => {
       const currentPostId = e.target.dataset.id;
       if (currentPostId) {
         watchedState.uiState.visitedLinksIds.add(currentPostId);
-        console.log(`Добавлен ID: ${currentPostId}`);
       }
     });
   });
