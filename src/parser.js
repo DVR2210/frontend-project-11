@@ -1,9 +1,11 @@
 export default (data) => {
+  console.log('Входные XML-данные:', data); // парсинг данных 
   const parser = new DOMParser();
   const parsedData = parser.parseFromString(data, 'application/xml');
 
   const error = parsedData.querySelector('parsererror');
   if (error) {
+    console.error('Ошибка парсинга:', error); // Логируем ошибку парсинга
     throw new Error('parseError');
   }
 
