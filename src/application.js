@@ -1,7 +1,6 @@
 import onChange from 'on-change';
 import axios from 'axios';
 import { string, setLocale } from 'yup';
-
 import uniqueId from 'lodash/uniqueId.js';
 import i18next from 'i18next';
 import resources from './locales/index.js';
@@ -23,7 +22,6 @@ const validate = (url, urlList) => {
       throw error;
     });
 };
-
 
 const getAxiosResponse = (url) => {
   const allOrigins = 'https://allorigins.hexlet.app/get';
