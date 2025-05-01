@@ -5,7 +5,7 @@ export default {
     sucсess: 'RSS успешно загружен',
     button: 'Просмотр',
     errors: {
-      invalidUrl: 'Ссылка должна быть валидным URL!!!!222',
+      invalidUrl: 'Ссылка должна быть валидным URL',
       doubleRss: 'RSS уже существует',
       emptyField: 'Поле не должно быть пустым',
       parseError: 'Ресурс не содержит валидный RSS',

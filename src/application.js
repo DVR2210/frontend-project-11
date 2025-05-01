@@ -70,7 +70,7 @@ export default () => {
     console.log('i18next инициализирован:', i18nInstance.t('success'));
     const elements = {
       form: document.querySelector('.rss-form'),
-      input: document.querySelector('input[id="url-input"]'),
+      input: document.querySelector('input[aria-label="url"]'),//'input[id="url-input"]'
       button: document.querySelector('button[type="submit"]'),
       feedback: document.querySelector('.feedback'),
       feeds: document.querySelector('.feeds'),
