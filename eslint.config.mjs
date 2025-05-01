@@ -30,6 +30,7 @@ export default [
       '@stylistic': stylisticJs, // Добавляем плагин для стилистических правил
     },
     rules: {
+      'semi': 'off', // Отключаем базовое правило - как вариант!
       '@stylistic/semi': ['error', 'always'], // Требуем точки с запятой
       '@stylistic/indent': ['error', 2], // Отступы 2 пробела
       '@stylistic/quotes': ['error', 'single'], // Одинарные кавычки
