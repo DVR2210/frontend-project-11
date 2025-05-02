@@ -10,29 +10,54 @@ import parser from './parser.js'
 const defaultLanguage = 'ru'
 const timeout = 5000
 
+// const validate = (url, urlList) => {
+//   const schema = string().trim().required().url().notOneOf(urlList)
+//   console.log('Валидация URL:', url, 'Список существующих URL:', urlList)
+//   return schema.validate(url, { abortEarly: false })
+//     .then(result => {
+//       console.log('Валидация успешна:', result)
+//     })
+//     .catch(error => {
+//       console.error('Ошибка валидации Yup:', error.message, error.errors)
+//       throw error
+//     })
+// }
+
 const validate = (url, urlList) => {
   const schema = string().trim().required().url().notOneOf(urlList)
   console.log('Валидация URL:', url, 'Список существующих URL:', urlList)
   return schema.validate(url, { abortEarly: false })
-    .then(result => {
+    .then((result) => {
       console.log('Валидация успешна:', result)
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('Ошибка валидации Yup:', error.message, error.errors)
-      throw error;
+      throw error
     })
 }
 
-const getAxiosResponse = url => {
+// const getAxiosResponse = url => {
+//   const allOrigins = 'https://allorigins.hexlet.app/get'
+//   const newUrl = new URL(allOrigins)
+//   newUrl.searchParams.set('url', url)
+//   newUrl.searchParams.set('disableCache', 'true')
+//   return axios.get(newUrl).catch(error => {
+//     console.error('Ошибка в getAxiosResponse:', error.message)
+//     throw error
+//   })
+// }
+
+const getAxiosResponse = (url) => {
   const allOrigins = 'https://allorigins.hexlet.app/get'
   const newUrl = new URL(allOrigins)
   newUrl.searchParams.set('url', url)
   newUrl.searchParams.set('disableCache', 'true')
-  return axios.get(newUrl).catch(error => {
+  return axios.get(newUrl).catch((error) => {
     console.error('Ошибка в getAxiosResponse:', error.message)
     throw error
   })
 }
+
 
 const createPosts = (state, newPosts, feedId) => {
   const preparedPosts = newPosts.map(post => ({ ...post, feedId, id: uniqueId() }))
@@ -120,12 +145,12 @@ export default () => {
 
     elements.form.addEventListener('submit', e => {
       e.preventDefault()
-      const urlList = watchedState.content.feeds.map(({ link }) => link);
+      const urlList = watchedState.content.feeds.map(({ link }) => link)
       console.log('Перед валидацией: inputValue=', watchedState.inputValue, 'urlList=', urlList)
 
       validate(watchedState.inputValue, urlList)
         .then(() => {
-          watchedState.valid = true;
+          watchedState.valid = true
           watchedState.process.processState = 'sending'
           return getAxiosResponse(watchedState.inputValue)
         })
