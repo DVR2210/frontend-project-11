@@ -1,10 +1,9 @@
 /* eslint-env node */
-
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 
 export default {
-  mode: process.env.NODE_ENV || 'development',
+  mode: process.env.NODE_ENV || 'development', /* eslint-env node */
   entry: './src/index.js',
   devServer: {
     open: true,
