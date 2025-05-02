@@ -139,31 +139,31 @@ const handlerProcessState = (elements, state, value, i18nInstance) => {
 
 export default (elements, state, i18nInstance) => (path, value) => {
   switch (path) {
-      case 'process.processState':
-          handlerProcessState(elements, state, value, i18nInstance)
-          break
+    case 'process.processState':
+      handlerProcessState(elements, state, value, i18nInstance)
+      break
 
-      case 'process.error':
-          handlerFinishWithError(elements, state.process.error, i18nInstance)
-          break
+    case 'process.error':
+      handlerFinishWithError(elements, state.process.error, i18nInstance)
+      break
 
-      case 'uiState.modalId':
-          renderModalWindow(elements, state, value)
-          break
+    case 'uiState.modalId':
+      renderModalWindow(elements, state, value)
+      break
 
-      case 'uiState.visitedLinksIds':
-          createContainer('posts', elements, state, i18nInstance)
-          break
+    case 'uiState.visitedLinksIds':
+      createContainer('posts', elements, state, i18nInstance)
+      break
 
-      case 'content.posts':
-          createContainer('posts', elements, state, i18nInstance)
-          break
+    case 'content.posts':
+      createContainer('posts', elements, state, i18nInstance)
+      break
 
-      case 'content.feeds':
-          createContainer('feeds', elements, state, i18nInstance)
-          break
+    case 'content.feeds':
+      createContainer('feeds', elements, state, i18nInstance)
+      break
 
-      default:
-          break
+    default:
+      break
   }
 }
