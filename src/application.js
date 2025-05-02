@@ -10,19 +10,6 @@ import parser from './parser.js'
 const defaultLanguage = 'ru'
 const timeout = 5000
 
-// const validate = (url, urlList) => {
-//   const schema = string().trim().required().url().notOneOf(urlList)
-//   console.log('Валидация URL:', url, 'Список существующих URL:', urlList)
-//   return schema.validate(url, { abortEarly: false })
-//     .then(result => {
-//       console.log('Валидация успешна:', result)
-//     })
-//     .catch(error => {
-//       console.error('Ошибка валидации Yup:', error.message, error.errors)
-//       throw error
-//     })
-// }
-
 const validate = (url, urlList) => {
   const schema = string().trim().required().url().notOneOf(urlList)
   console.log('Валидация URL:', url, 'Список существующих URL:', urlList)
@@ -36,17 +23,6 @@ const validate = (url, urlList) => {
     })
 }
 
-// const getAxiosResponse = url => {
-//   const allOrigins = 'https://allorigins.hexlet.app/get'
-//   const newUrl = new URL(allOrigins)
-//   newUrl.searchParams.set('url', url)
-//   newUrl.searchParams.set('disableCache', 'true')
-//   return axios.get(newUrl).catch(error => {
-//     console.error('Ошибка в getAxiosResponse:', error.message)
-//     throw error
-//   })
-// }
-
 const getAxiosResponse = (url) => {
   const allOrigins = 'https://allorigins.hexlet.app/get'
   const newUrl = new URL(allOrigins)
@@ -57,7 +33,6 @@ const getAxiosResponse = (url) => {
     throw error
   })
 }
-
 
 const createPosts = (state, newPosts, feedId) => {
   const preparedPosts = newPosts.map(post => ({ ...post, feedId, id: uniqueId() }))
