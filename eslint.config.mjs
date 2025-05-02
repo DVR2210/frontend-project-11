@@ -1,6 +1,6 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import stylisticJs from '@stylistic/eslint-plugin-js';
+import globals from 'globals'
+import pluginJs from '@eslint/js'
+import stylisticJs from '@stylistic/eslint-plugin-js'
 
 export default [
   {
@@ -33,4 +33,4 @@ export default [
       '@stylistic/arrow-parens': ['error', 'as-needed'],
     },
   },
-];
+]

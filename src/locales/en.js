@@ -12,4 +12,4 @@ export default {
       networkError: 'Network error',
     },
   },
-};
+}

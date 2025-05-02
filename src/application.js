@@ -1,71 +1,71 @@
-import onChange from 'on-change';
-import axios from 'axios';
-import { string, setLocale } from 'yup';
-import uniqueId from 'lodash/uniqueId.js';
-import i18next from 'i18next';
-import resources from './locales/index.js';
-import render from './view.js';
-import parser from './parser.js';
+import onChange from 'on-change'
+import axios from 'axios'
+import { string, setLocale } from 'yup'
+import uniqueId from 'lodash/uniqueId.js'
+import i18next from 'i18next'
+import resources from './locales/index.js'
+import render from './view.js'
+import parser from './parser.js'
 
-const defaultLanguage = 'ru';
-const timeout = 5000;
+const defaultLanguage = 'ru'
+const timeout = 5000
 
 const validate = (url, urlList) => {
-  const schema = string().trim().required().url().notOneOf(urlList);
-  console.log('Валидация URL:', url, 'Список существующих URL:', urlList);
+  const schema = string().trim().required().url().notOneOf(urlList)
+  console.log('Валидация URL:', url, 'Список существующих URL:', urlList)
   return schema.validate(url, { abortEarly: false })
     .then(result => {
-      console.log('Валидация успешна:', result);
+      console.log('Валидация успешна:', result)
     })
     .catch(error => {
-      console.error('Ошибка валидации Yup:', error.message, error.errors);
+      console.error('Ошибка валидации Yup:', error.message, error.errors)
       throw error;
-    });
-};
+    })
+}
 
 const getAxiosResponse = url => {
-  const allOrigins = 'https://allorigins.hexlet.app/get';
-  const newUrl = new URL(allOrigins);
-  newUrl.searchParams.set('url', url);
-  newUrl.searchParams.set('disableCache', 'true');
+  const allOrigins = 'https://allorigins.hexlet.app/get'
+  const newUrl = new URL(allOrigins)
+  newUrl.searchParams.set('url', url)
+  newUrl.searchParams.set('disableCache', 'true')
   return axios.get(newUrl).catch(error => {
-    console.error('Ошибка в getAxiosResponse:', error.message);
-    throw error;
-  });
-};
+    console.error('Ошибка в getAxiosResponse:', error.message)
+    throw error
+  })
+}
 
 const createPosts = (state, newPosts, feedId) => {
-  const preparedPosts = newPosts.map(post => ({ ...post, feedId, id: uniqueId() }));
-  state.content.posts = [...state.content.posts, ...preparedPosts];
-};
+  const preparedPosts = newPosts.map(post => ({ ...post, feedId, id: uniqueId() }))
+  state.content.posts = [...state.content.posts, ...preparedPosts]
+}
 
 const getNewPosts = state => {
   const promises = state.content.feeds
     .map(({ link, feedId }) => getAxiosResponse(link)
       .then(response => {
-        const { posts } = parser(response.data.contents);
-        const addedPosts = state.content.posts.map(post => post.link);
-        const newPosts = posts.filter(post => !addedPosts.includes(post.link));
+        const { posts } = parser(response.data.contents)
+        const addedPosts = state.content.posts.map(post => post.link)
+        const newPosts = posts.filter(post => !addedPosts.includes(post.link))
         if (newPosts.length > 0) {
-          createPosts(state, newPosts, feedId);
+          createPosts(state, newPosts, feedId)
         }
-        return Promise.resolve();
-      }));
+        return Promise.resolve()
+      }))
 
   Promise.allSettled(promises)
     .finally(() => {
-      setTimeout(() => getNewPosts(state), timeout);
-    });
-};
+      setTimeout(() => getNewPosts(state), timeout)
+    })
+}
 
 export default () => {
-  const i18nInstance = i18next.createInstance();
+  const i18nInstance = i18next.createInstance()
   i18nInstance.init({
     lng: defaultLanguage,
     debug: true,
     resources,
   }).then(() => {
-    console.log('i18next инициализирован:', i18nInstance.t('success'));
+    console.log('i18next инициализирован:', i18nInstance.t('success'))
     const elements = {
       form: document.querySelector('.rss-form'),
       input: document.querySelector('input[id="url-input"]'),
@@ -79,7 +79,7 @@ export default () => {
         body: document.querySelector('.modal-body'),
         button: document.querySelector('.full-article'),
       },
-    };
+    }
 
     setLocale({
       mixed: {
@@ -90,7 +90,7 @@ export default () => {
         url: 'invalidUrl',
         default: 'defaultError',
       },
-    });
+    })
 
     const initialState = {
       valid: true,
@@ -107,58 +107,58 @@ export default () => {
         visitedLinksIds: new Set(),
         modalId: '',
       },
-    };
+    }
 
-    const watchedState = onChange(initialState, render(elements, initialState, i18nInstance));
-    getNewPosts(watchedState);
+    const watchedState = onChange(initialState, render(elements, initialState, i18nInstance))
+    getNewPosts(watchedState)
 
     elements.form.addEventListener('input', e => {
-      e.preventDefault();
-      watchedState.process.processState = 'filling';
-      watchedState.inputValue = e.target.value;
-    });
+      e.preventDefault()
+      watchedState.process.processState = 'filling'
+      watchedState.inputValue = e.target.value
+    })
 
     elements.form.addEventListener('submit', e => {
-      e.preventDefault();
+      e.preventDefault()
       const urlList = watchedState.content.feeds.map(({ link }) => link);
-      console.log('Перед валидацией: inputValue=', watchedState.inputValue, 'urlList=', urlList);
+      console.log('Перед валидацией: inputValue=', watchedState.inputValue, 'urlList=', urlList)
 
       validate(watchedState.inputValue, urlList)
         .then(() => {
           watchedState.valid = true;
-          watchedState.process.processState = 'sending';
-          return getAxiosResponse(watchedState.inputValue);
+          watchedState.process.processState = 'sending'
+          return getAxiosResponse(watchedState.inputValue)
         })
         .then(response => {
-          console.log('Ответ от allorigins:', response.data);
-          const data = response.data.contents;
-          const { feed, posts } = parser(data, i18nInstance, elements);
-          const feedId = uniqueId();
+          console.log('Ответ от allorigins:', response.data)
+          const data = response.data.contents
+          const { feed, posts } = parser(data, i18nInstance, elements)
+          const feedId = uniqueId()
 
-          watchedState.content.feeds.push({ ...feed, feedId, link: watchedState.inputValue });
-          createPosts(watchedState, posts, feedId);
+          watchedState.content.feeds.push({ ...feed, feedId, link: watchedState.inputValue })
+          createPosts(watchedState, posts, feedId)
 
-          watchedState.process.processState = 'finished';
+          watchedState.process.processState = 'finished'
         })
         .catch(error => {
-          console.error('Ошибка в обработчике submit:', error.message, error);
-          watchedState.valid = false;
-          watchedState.process.error = error.message ?? 'defaultError';
-          watchedState.process.processState = 'error';
-        });
-    });
+          console.error('Ошибка в обработчике submit:', error.message, error)
+          watchedState.valid = false
+          watchedState.process.error = error.message ?? 'defaultError'
+          watchedState.process.processState = 'error'
+        })
+    })
 
     elements.modal.modalWindow.addEventListener('show.bs.modal', e => {
-      const currentPostId = e.relatedTarget.getAttribute('data-id');
-      watchedState.uiState.visitedLinksIds.add(currentPostId);
-      watchedState.uiState.modalId = currentPostId;
-    });
+      const currentPostId = e.relatedTarget.getAttribute('data-id')
+      watchedState.uiState.visitedLinksIds.add(currentPostId)
+      watchedState.uiState.modalId = currentPostId
+    })
 
     elements.posts.addEventListener('click', e => {
-      const currentPostId = e.target.dataset.id;
+      const currentPostId = e.target.dataset.id
       if (currentPostId) {
-        watchedState.uiState.visitedLinksIds.add(currentPostId);
+        watchedState.uiState.visitedLinksIds.add(currentPostId)
       }
-    });
-  });
-};
+    })
+  })
+}
