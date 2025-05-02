@@ -39,10 +39,10 @@ const createPosts = (state, newPosts, feedId) => {
   state.content.posts = [...state.content.posts, ...preparedPosts]
 }
 
-const getNewPosts = state => {
+const getNewPosts = (state) => {
   const promises = state.content.feeds
     .map(({ link, feedId }) => getAxiosResponse(link)
-      .then(response => {
+      .then((response) => {
         const { posts } = parser(response.data.contents)
         const addedPosts = state.content.posts.map(post => post.link)
         const newPosts = posts.filter(post => !addedPosts.includes(post.link))
@@ -112,13 +112,13 @@ export default () => {
     const watchedState = onChange(initialState, render(elements, initialState, i18nInstance))
     getNewPosts(watchedState)
 
-    elements.form.addEventListener('input', e => {
+    elements.form.addEventListener('input', (e) => {
       e.preventDefault()
       watchedState.process.processState = 'filling'
       watchedState.inputValue = e.target.value
     })
 
-    elements.form.addEventListener('submit', e => {
+    elements.form.addEventListener('submit', (e) => {
       e.preventDefault()
       const urlList = watchedState.content.feeds.map(({ link }) => link)
       console.log('Перед валидацией: inputValue=', watchedState.inputValue, 'urlList=', urlList)
@@ -129,7 +129,7 @@ export default () => {
           watchedState.process.processState = 'sending'
           return getAxiosResponse(watchedState.inputValue)
         })
-        .then(response => {
+        .then((response) => {
           console.log('Ответ от allorigins:', response.data)
           const data = response.data.contents
           const { feed, posts } = parser(data, i18nInstance, elements)
@@ -140,7 +140,7 @@ export default () => {
 
           watchedState.process.processState = 'finished'
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Ошибка в обработчике submit:', error.message, error)
           watchedState.valid = false
           watchedState.process.error = error.message ?? 'defaultError'
@@ -148,13 +148,13 @@ export default () => {
         })
     })
 
-    elements.modal.modalWindow.addEventListener('show.bs.modal', e => {
+    elements.modal.modalWindow.addEventListener('show.bs.modal', (e) => {
       const currentPostId = e.relatedTarget.getAttribute('data-id')
       watchedState.uiState.visitedLinksIds.add(currentPostId)
       watchedState.uiState.modalId = currentPostId
     })
 
-    elements.posts.addEventListener('click', e => {
+    elements.posts.addEventListener('click', (e) => {
       const currentPostId = e.target.dataset.id
       if (currentPostId) {
         watchedState.uiState.visitedLinksIds.add(currentPostId)

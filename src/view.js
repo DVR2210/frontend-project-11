@@ -3,29 +3,29 @@ const renderPosts = (state, div, i18nInstance) => {
   ul.classList.add('list-group', 'border-0', 'rounded-0')
 
   state.content.posts.forEach((post) => {
-      const { title, link, id } = post
+    const { title, link, id } = post
 
-      const li = document.createElement('li')
-      li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
+    const li = document.createElement('li')
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
 
-      const a = document.createElement('a')
-      a.classList.add(state.uiState.visitedLinksIds.has(id) ? ('fw-normal', 'link-secondary') : 'fw-bold')
-      a.setAttribute('href', link)
-      a.setAttribute('data-id', id)
-      a.setAttribute('target', '_blank')
-      a.setAttribute('rel', 'noopener noreferrer')
-      a.textContent = title
+    const a = document.createElement('a')
+    a.classList.add(state.uiState.visitedLinksIds.has(id) ? ('fw-normal', 'link-secondary') : 'fw-bold')
+    a.setAttribute('href', link)
+    a.setAttribute('data-id', id)
+    a.setAttribute('target', '_blank')
+    a.setAttribute('rel', 'noopener noreferrer')
+    a.textContent = title
 
-      const button = document.createElement('button')
-      button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
-      button.setAttribute('type', 'button')
-      button.setAttribute('data-id', id)
-      button.setAttribute('data-bs-toggle', 'modal')
-      button.setAttribute('data-bs-target', '#modal')
-      button.textContent = i18nInstance.t('button')
+    const button = document.createElement('button')
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
+    button.setAttribute('type', 'button')
+    button.setAttribute('data-id', id)
+    button.setAttribute('data-bs-toggle', 'modal')
+    button.setAttribute('data-bs-target', '#modal')
+    button.textContent = i18nInstance.t('button')
 
-      li.append(a, button)
-      ul.append(li)
+    li.append(a, button)
+    ul.append(li)
   })
 
   div.append(ul)
@@ -36,21 +36,21 @@ const renderFeeds = (state, div) => {
   ul.classList.add('list-group', 'border-0', 'rounded-0')
 
   state.content.feeds.forEach((feed) => {
-      const { title, description } = feed
+    const { title, description } = feed
 
-      const li = document.createElement('li')
-      li.classList.add('list-group-item', 'border-0', 'border-end-0')
+    const li = document.createElement('li')
+    li.classList.add('list-group-item', 'border-0', 'border-end-0')
 
-      const h3 = document.createElement('h3')
-      h3.classList.add('h6', 'm-0')
-      h3.textContent = title
+    const h3 = document.createElement('h3')
+    h3.classList.add('h6', 'm-0')
+    h3.textContent = title
 
-      const p = document.createElement('p')
-      p.classList.add('m-0', 'small', 'text-black-50')
-      p.textContent = description
+    const p = document.createElement('p')
+    p.classList.add('m-0', 'small', 'text-black-50')
+    p.textContent = description
 
-      li.append(h3, p)
-      ul.append(li)
+    li.append(h3, p)
+    ul.append(li)
   })
 
   div.append(ul)
@@ -74,11 +74,11 @@ const createContainer = (type, elements, state, i18nInstance) => {
   elements[type].append(divCard)
 
   if (type === 'posts') {
-      renderPosts(state, divCard, i18nInstance)
+    renderPosts(state, divCard, i18nInstance)
   }
 
   if (type === 'feeds') {
-      renderFeeds(state, divCard)
+    renderFeeds(state, divCard)
   }
 }
 
@@ -111,7 +111,7 @@ const handlerFinishWithError = (elements, error, i18nInstance) => {
   elements.feedback.textContent = i18nInstance.t(`errors.${error.replace(/ /g, '')}`, 'errors.defaultError')
 
   if (error !== 'Network Error') {
-      elements.input.classList.add('is-invalid')
+    elements.input.classList.add('is-invalid')
   }
 
   elements.button.disabled = false
@@ -120,20 +120,20 @@ const handlerFinishWithError = (elements, error, i18nInstance) => {
 
 const handlerProcessState = (elements, state, value, i18nInstance) => {
   switch (value) {
-      case 'filling':
-          break
-      case 'finished':
-          handlerSuccessFinish(elements, i18nInstance)
-          break
-      case 'error':
-          handlerFinishWithError(elements, state.process.error, i18nInstance)
-          break
-      case 'sending':
-          elements.button.setAttribute('disabled', 'disabled')
-          elements.input.setAttribute('readonly', 'readonly')
-          break
-      default:
-          throw new Error(`Unknown process state: ${value}`)
+    case 'filling':
+      break
+    case 'finished':
+      handlerSuccessFinish(elements, i18nInstance)
+      break
+    case 'error':
+      handlerFinishWithError(elements, state.process.error, i18nInstance)
+      break
+    case 'sending':
+      elements.button.setAttribute('disabled', 'disabled')
+      elements.input.setAttribute('readonly', 'readonly')
+      break
+    default:
+      throw new Error(`Unknown process state: ${value}`)
   }
 }
 
